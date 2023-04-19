@@ -1,5 +1,6 @@
 from django import forms
 from .models import Expense, Balance, Payment_Method, Category
+from django.contrib.auth.models import User
 
 class ExpenseForm(forms.ModelForm):
     balance = forms.ModelChoiceField(queryset=Balance.objects.none(), empty_label=None)
@@ -13,7 +14,7 @@ class ExpenseForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["balance"].queryset = Balance.objects.filter(user=user)
         self.fields["payment_method"].queryset = Payment_Method.objects.filter(user=user)
-        self.fields["category"].queryset = Category.objects.filter(user=user)
+        self.fields["category"].queryset = Category.objects.filter(user=user) | Category.objects.filter(user=User.objects.get(id=1))
 
 class BalanceForm(forms.ModelForm):
     class Meta:
