@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% csrf_token %}
+  <h2>Spesa</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Bilancio</th>
+        <th>Metodo di Pagamento</th>
+        <th>Importo</th>
+        <th>Data</th>
+        <th>Categoria</th>
+        <th>Descrizione</th>
+        <th>Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>{{ expense.balance.display }}</td>
+          <td>{{ expense.payment_method.display }}</td>
+          <td>{{ expense.amount }}</td>
+          <td>{{ expense.date }}</td>
+          <td>{{ expense.category }}</td>
+          <td>{{ expense.description }}</td>
+          <td>
+            <a href="{% url 'expense_edit' expense.pk %}" class="btn btn-primary">Modifica</a>
+            <a href="{% url 'expense_delete' expense.pk %}" class="btn btn-danger">Elimina</a>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  <a href="{% url 'expenses_list' %}" class="btn btn-primary">Indietro</a>
+{% endblock %}

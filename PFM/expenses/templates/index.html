@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% csrf_token %}
+  <h2>Bilanci</h2>
+  {% for balance in balances %}
+    <p><strong>{{ balance.display }}</strong>: {{ balance.calculate }}</p>
+  {% empty %}
+    <p>Nessun bilancio trovato</p>
+  {% endfor %}
+  <a href="{% url 'balance_new' %}" class="btn btn-primary">Aggiungi</a>
+  <h2>Metodi di pagamento</h2>
+  {% for pm in payment_methods %}
+    <p><strong>{{ pm.display }}</strong>: {{ pm.calculate }}</p>
+  {% empty %}
+    <p>Nessun metodo di pagamento trovato</p>
+  {% endfor %}
+  <a href="{% url 'payment_method_new' %}" class="btn btn-primary">Aggiungi</a>
+  <h2>Ultime spese</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Importo</th>
+        <th>Data</th>
+        <th>Categoria</th>
+        <th>Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for expense in expenses %}
+        <tr>
+          <td>{{ expense.amount }}</td>
+          <td>{{ expense.date }}</td>
+          <td>{{ expense.category }}</td>
+          <td>
+            <a href="{% url 'expense_show' expense.pk %}" class="btn btn-primary">Visualizza</a>
+            <a href="{% url 'expense_edit' expense.pk %}" class="btn btn-primary">Modifica</a>
+            <a href="{% url 'expense_delete' expense.pk %}" class="btn btn-danger">Elimina</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="4">Nessuna spesa trovata.</td>
+        </tr>
+      {% endfor %}
+      <tr>
+        <td><a href="{% url 'expenses_list' %}" class="btn btn-primary">Visualizza tutto</a></td>
+      </tr>
+    </tbody>
+  </table>
+  <a href="{% url 'expense_new' %}" class="btn btn-success">Nuova Spesa</a>
+{% endblock %}

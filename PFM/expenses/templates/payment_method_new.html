@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% csrf_token %}
+  <h2>Nuovo Metodo di pagamento</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Salva</button>
+    <a href="{% url 'index' %}" class="btn btn-secondary">Annulla</a>
+  </form>
+{% endblock %}

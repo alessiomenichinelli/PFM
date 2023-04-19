@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% csrf_token %}
+  <h2>Spese</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Importo</th>
+        <th>Data</th>
+        <th>Categoria</th>
+        <th>Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for expense in expenses %}
+        <tr>
+          <td>{{ expense.amount }}</td>
+          <td>{{ expense.date }}</td>
+          <td>{{ expense.category }}</td>
+          <td>
+            <a href="{% url 'expense_show' expense.pk %}" class="btn btn-primary">Visualizza</a>
+            <a href="{% url 'expense_edit' expense.pk %}" class="btn btn-primary">Modifica</a>
+            <a href="{% url 'expense_delete' expense.pk %}" class="btn btn-danger">Elimina</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="4">Nessuna spesa trovata.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'expense_new' %}" class="btn btn-success">Nuova Spesa</a>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% csrf_token %}
+  <h2>Elimina Spesa</h2>
+  <p>Sei sicuro di voler eliminare questa spesa?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Elimina</button>
+    <a href="{% url 'expenses_list' %}" class="btn btn-secondary">Annulla</a>
+  </form>
+{% endblock %}
