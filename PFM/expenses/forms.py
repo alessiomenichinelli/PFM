@@ -1,9 +1,10 @@
 from django import forms
-from .models import Expense, Balance, Payment_Method
+from .models import Expense, Balance, Payment_Method, Category
 
 class ExpenseForm(forms.ModelForm):
     balance = forms.ModelChoiceField(queryset=Balance.objects.none(), empty_label=None)
     payment_method = forms.ModelChoiceField(queryset=Payment_Method.objects.none(), empty_label=None)
+    category = forms.ModelChoiceField(queryset=Category.objects.none(), empty_label=None)
     class Meta:
         model = Expense
         fields = ('balance', 'payment_method', 'amount', 'date', 'category', 'description',)
@@ -12,6 +13,7 @@ class ExpenseForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["balance"].queryset = Balance.objects.filter(user=user)
         self.fields["payment_method"].queryset = Payment_Method.objects.filter(user=user)
+        self.fields["category"].queryset = Category.objects.filter(user=user)
 
 class BalanceForm(forms.ModelForm):
     class Meta:
