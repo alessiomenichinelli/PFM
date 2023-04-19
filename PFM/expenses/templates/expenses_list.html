@@ -29,7 +29,10 @@
           <td colspan="4">Nessuna spesa trovata.</td>
         </tr>
       {% endfor %}
+      <tr>
+        <td colspan="4"><a href="{% url 'expense_new' %}" class="btn btn-success">Nuova Spesa</a></td>
+      </tr>
     </tbody>
   </table>
-  <a href="{% url 'expense_new' %}" class="btn btn-success">Nuova Spesa</a>
+  
 {% endblock %}
