@@ -12,7 +12,7 @@ def index(request):
 
 @login_required
 def expenses_list(request):
-    expenses = Expense.objects.filter(user=request.user)
+    expenses = Expense.objects.filter(user=request.user).order_by("-date")
     return render(request, 'expenses_list.html', {'expenses': expenses})
 
 @login_required
@@ -37,14 +37,14 @@ def expense_show(request, pk):
 def expense_edit(request, pk):
     expense = get_object_or_404(Expense, pk=pk, user=request.user)
     if request.method == "POST":
-        form = ExpenseForm(request.POST, instance=expense)
+        form = ExpenseForm(request.user, request.POST, instance=expense)
         if form.is_valid():
             expense = form.save(commit=False)
             expense.user = request.user
             expense.save()
             return redirect('expenses_list')
     else:
-        form = ExpenseForm(instance=expense)
+        form = ExpenseForm(request.user, instance=expense)
     return render(request, 'expense_edit.html', {'form': form})
 
 @login_required
