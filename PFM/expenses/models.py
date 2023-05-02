@@ -1,34 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
     chat_id = models.IntegerField(blank=True)
     name = models.CharField(max_length=200, blank=True)
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
-
 
 class Balance(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     def __str__(self):
         return self.name + "(" + str(self.user.id) + ")"
-    
+
     def display(self):
         string = self.name
         string = string[0].upper() + string[1:]
         return string
-    
+
     def calculate(self):
         balance = 0
         expenses = Expense.objects.filter(user=self.user, balance=self)
@@ -43,12 +31,12 @@ class Payment_Method(models.Model):
     name = models.CharField(max_length=200)
     def __str__(self):
         return self.name + "(" + str(self.user.id) + ")"
-    
+
     def display(self):
         string = self.name
         string = string[0].upper() + string[1:]
-        return string  
-    
+        return string
+
     def calculate(self):
         balance = 0
         expenses = Expense.objects.filter(user=self.user, payment_method=self)
@@ -56,7 +44,7 @@ class Payment_Method(models.Model):
             balance -= ex.amount
         balance = str(balance)
         balance += '€'
-        return balance      
+        return balance
 
 class Category(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -64,7 +52,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name + "(" + str(self.user.id) + ")"
-    
+
 class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     balance = models.ForeignKey(Balance, on_delete=models.CASCADE)
