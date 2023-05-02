@@ -91,7 +91,7 @@ def payment_method_new(request):
 class BalancesAPI(APIView):
     authentication_classes = [TelegramAuthentication]
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request, format=None):
         balances = Balance.objects.filter(user=self.request.user)
         serializer = BalanceSerializers(balances, many=True)
@@ -100,11 +100,11 @@ class BalancesAPI(APIView):
             balance = Balance.objects.get(pk=bal['id'])
             bal['amount']=balance.calculate()
         return Response(bals)
-    
+
 class PMAPI(APIView):
     authentication_classes = [TelegramAuthentication]
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request, format=None):
         pm = Payment_Method.objects.filter(user=self.request.user)
         serializer = PMSerializers(pm, many=True)
@@ -113,7 +113,7 @@ class PMAPI(APIView):
             balance = Payment_Method.objects.get(pk=bal['id'])
             bal['amount']=balance.calculate()
         return Response(bals)
-    
+
 class ProfileAPI(APIView):
     authentication_classes = [TelegramAuthentication]
     permission_classes = [permissions.IsAdminUser]
@@ -129,22 +129,19 @@ class CreateProfileAPI(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
-        datas = request.data
+        datas = request.data.copy()
         datas['user']=request.user.pk
         serializer = ProfileSerializers(data=datas)
-        print (serializer)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 class UserAPI(APIView):
     authentication_classes = [TelegramAuthentication]
     permission_classes = [permissions.IsAdminUser]
 
     def get(self, request, format=None):
         user = User.objects.get(username=request.data['username'])
-        print(user.password)
         serializer = UserSerializers(user)
         return Response(serializer.data)
-    
