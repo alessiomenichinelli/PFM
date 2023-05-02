@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['menitz.pythonanywhere.com', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'files.apps.FilesConfig',
     'accounts.apps.AccountsConfig',
     'expenses.apps.ExpensesConfig',
