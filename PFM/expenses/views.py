@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Expense, Balance, Payment_Method
+from .models import Expense, Balance, Payment_Method, Profile, User
 from .forms import ExpenseForm, BalanceForm, PMForm
 from .permissions import TelegramAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .serializer import UserSerializers, ProfileSerializers, BalanceSerializers, PMSerializers ,CategorySerializers, ExpenseSerializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import permissions, status
+from rest_framework.authentication import BasicAuthentication
+import io
+from rest_framework.parsers import JSONParser
 
 @login_required
 def index(request):
@@ -109,4 +113,38 @@ class PMAPI(APIView):
             balance = Payment_Method.objects.get(pk=bal['id'])
             bal['amount']=balance.calculate()
         return Response(bals)
+    
+class ProfileAPI(APIView):
+    authentication_classes = [TelegramAuthentication]
+    permission_classes = [permissions.IsAdminUser]
+
+    def get(self, request, format=None):
+        profiles = Profile.objects.all()
+        serializer = ProfileSerializers(profiles, many=True)
+        return Response(serializer.data)
+
+
+class CreateProfileAPI(APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        datas = request.data
+        datas['user']=request.user.pk
+        serializer = ProfileSerializers(data=datas)
+        print (serializer)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class UserAPI(APIView):
+    authentication_classes = [TelegramAuthentication]
+    permission_classes = [permissions.IsAdminUser]
+
+    def get(self, request, format=None):
+        user = User.objects.get(username=request.data['username'])
+        print(user.password)
+        serializer = UserSerializers(user)
+        return Response(serializer.data)
     

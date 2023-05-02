@@ -12,5 +12,8 @@ urlpatterns = [
     path('new_bal/', views.balance_new, name ='balance_new'),
     path('new_pm/', views.payment_method_new, name ='payment_method_new'),
     path('api/balances/', views.BalancesAPI.as_view(), name = 'balances_api'),
-    path('api/pm/', views.PMAPI.as_view(), name = 'pm_api')
+    path('api/pm/', views.PMAPI.as_view(), name = 'pm_api'),
+    path('api/profiles/', views.ProfileAPI.as_view(), name = 'profiles_api'),
+    path('api/profiles/new/', views.CreateProfileAPI.as_view(), name='new_profile_api'),
+    path('api/users/', views.UserAPI.as_view(), name='users-api'),
 ]
