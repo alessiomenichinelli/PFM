@@ -4,14 +4,14 @@
 {% csrf_token %}
   <h2>Bilanci</h2>
   {% for balance in balances %}
-    <p><strong>{{ balance.display }}</strong>: {{ balance.calculate }}</p>
+    <p><strong>{{ balance }}</strong>: {{ balance.calculate }}</p>
   {% empty %}
     <p>Nessun bilancio trovato</p>
   {% endfor %}
   <a href="{% url 'balance_new' %}" class="btn btn-primary">Aggiungi</a>
   <h2>Metodi di pagamento</h2>
   {% for pm in payment_methods %}
-    <p><strong>{{ pm.display }}</strong>: {{ pm.calculate }}</p>
+    <p><strong>{{ pm }}</strong>: {{ pm.calculate }}</p>
   {% empty %}
     <p>Nessun metodo di pagamento trovato</p>
   {% endfor %}

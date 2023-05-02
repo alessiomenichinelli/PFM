@@ -10,9 +10,6 @@ class Balance(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     def __str__(self):
-        return self.name + "(" + str(self.user.id) + ")"
-
-    def display(self):
         string = self.name
         string = string[0].upper() + string[1:]
         return string
@@ -30,9 +27,6 @@ class Payment_Method(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     def __str__(self):
-        return self.name + "(" + str(self.user.id) + ")"
-
-    def display(self):
         string = self.name
         string = string[0].upper() + string[1:]
         return string
@@ -51,7 +45,9 @@ class Category(models.Model):
     name = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.name + "(" + str(self.user.id) + ")"
+        string = self.name
+        string = string[0].upper() + string[1:]
+        return string
 
 class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
