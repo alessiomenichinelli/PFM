@@ -6,6 +6,7 @@ class ExpenseForm(forms.ModelForm):
     balance = forms.ModelChoiceField(queryset=Balance.objects.none(), empty_label=None)
     payment_method = forms.ModelChoiceField(queryset=Payment_Method.objects.none(), empty_label=None)
     category = forms.ModelChoiceField(queryset=Category.objects.none(), empty_label=None)
+    date = forms.DateField(widget=forms.SelectDateWidget)
     class Meta:
         model = Expense
         fields = ('balance', 'payment_method', 'amount', 'date', 'category', 'description',)
