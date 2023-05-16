@@ -26,3 +26,8 @@ class PMForm(forms.ModelForm):
     class Meta:
         model = Payment_Method
         fields = ('name',)
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ('name',)

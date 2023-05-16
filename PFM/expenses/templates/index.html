@@ -16,6 +16,13 @@
     <p>Nessun metodo di pagamento trovato</p>
   {% endfor %}
   <a href="{% url 'payment_method_new' %}" class="btn btn-primary">Aggiungi</a>
+  <h2>Categorie</h2>
+  {% for ct in categories %}
+    <p><strong>{{ ct }}</strong>: {{ ct.calculate }}</p>
+  {% empty %}
+    <p>Nessuna categoria trovato</p>
+  {% endfor %}
+  <a href="{% url 'category_new' %}" class="btn btn-primary">Aggiungi</a>
   <h2>Ultime spese</h2>
   <table class="table">
     <thead>

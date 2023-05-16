@@ -4,6 +4,28 @@
 {% csrf_token %}
   <h2>Elimina Spesa</h2>
   <p>Sei sicuro di voler eliminare questa spesa?</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Bilancio</th>
+        <th>Metodo di Pagamento</th>
+        <th>Importo</th>
+        <th>Data</th>
+        <th>Categoria</th>
+        <th>Descrizione</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>{{ expense.balance }}</td>
+          <td>{{ expense.payment_method }}</td>
+          <td>{{ expense.amount }}</td>
+          <td>{{ expense.date }}</td>
+          <td>{{ expense.category }}</td>
+          <td>{{ expense.description }}</td>
+        </tr>
+    </tbody>
+  </table>
   <form method="post">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">Elimina</button>

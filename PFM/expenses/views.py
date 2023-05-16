@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Expense, Balance, Payment_Method, Profile, User
-from .forms import ExpenseForm, BalanceForm, PMForm
+from .models import Expense, Balance, Payment_Method, Profile, User, Category
+from .forms import ExpenseForm, BalanceForm, PMForm, CategoryForm
 from .permissions import TelegramAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .serializer import UserSerializers, ProfileSerializers, BalanceSerializers, PMSerializers ,CategorySerializers, ExpenseSerializers
@@ -16,8 +16,9 @@ from rest_framework.parsers import JSONParser
 def index(request):
     balances = Balance.objects.filter(user=request.user)
     payment_methods = Payment_Method.objects.filter(user=request.user)
+    categories = Category.objects.filter(user=request.user) | Category.objects.filter(user=User.objects.get(id=1))
     expenses = Expense.objects.filter(user=request.user).order_by("-date")[:5]
-    return render(request, 'index.html', {'balances': balances, 'payment_methods': payment_methods, 'expenses':expenses})
+    return render(request, 'index.html', {'balances': balances, 'payment_methods': payment_methods, 'expenses':expenses, 'categories':categories})
 
 @login_required
 def expenses_list(request):
@@ -59,8 +60,11 @@ def expense_edit(request, pk):
 @login_required
 def expense_delete(request, pk):
     expense = get_object_or_404(Expense, pk=pk, user=request.user)
-    expense.delete()
-    return redirect('expenses_list')
+    if request.method == "POST":
+        expense.delete()
+        return redirect('expenses_list')
+    else:
+        return render(request, 'expense_delete.html', {'expense':expense})
 
 @login_required
 def balance_new(request):
@@ -87,6 +91,19 @@ def payment_method_new(request):
     else:
         form = BalanceForm(request.POST)
     return render(request, 'payment_method_new.html', {'form': form})
+
+@login_required
+def category_new(request):
+    if request.method == "POST":
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            ct = form.save(commit=False)
+            ct.user = request.user
+            ct.save()
+            return redirect('index')
+    else:
+        form = BalanceForm(request.POST)
+    return render(request, 'category_new.html', {'form': form})
 
 class BalancesAPI(APIView):
     authentication_classes = [TelegramAuthentication]

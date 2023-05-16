@@ -48,6 +48,15 @@ class Category(models.Model):
         string = self.name
         string = string[0].upper() + string[1:]
         return string
+    
+    def calculate(self):
+        balance = 0
+        expenses = Expense.objects.filter(user=self.user, category=self)
+        for ex in expenses:
+            balance += ex.amount
+        balance = str(balance)
+        balance += '€'
+        return balance
 
 class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
